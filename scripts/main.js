@@ -130,13 +130,13 @@ geotab.addin.testAddIn = function (api, state) {
       if(noInfoList.length > 0){
         console.log("Vehicles not in Master List:");
         console.log(noInfoList);
-        recallAddIn.uiModule.updateStatus("recallStatusMessage",noInfoList.length + " vehicle types you have access to have never been reviewed.",false);
+        recallAddIn.uiModule.updateStatus("snackbar",noInfoList.length + " vehicle types you have access to have never been reviewed.",false);
       }
       
       recallResults = await Promise.all(getRecallPromise);
       console.log(recallResults);
       if(vehicleList.length !== recallResults.length){
-        recallAddin.uiModule.updateStatus("recallStatusMessage","Something went wrong getting Recalls from Database",true);
+        recallAddin.uiModule.updateStatus("snackbar","Something went wrong getting Recalls from Database",true);
       }else{
         for(let i = 0; i < recallResults.length; i++){
           const recallInformation = JSON.parse(recallResults[i].data).recalls[0];
@@ -209,13 +209,13 @@ geotab.addin.testAddIn = function (api, state) {
       //Fetching Recalls only if there are any eligibleVehicleTypes
       if(eligibleVehicleTypes.length > 0){
         //Get Recalls From NHTSA
-        recallAddIn.uiModule.updateStatus("recallStatusMessage","Requesting Recall History from NHTSA...",false);
+        recallAddIn.uiModule.updateStatus("snackbar","Requesting Recall History from NHTSA...",false);
         let recallObject = await recallAddIn.nhtsaModule.getRecallsForFleet(api,eligibleVehicleTypes);
         console.log(recallObject);
-        recallAddIn.uiModule.updateStatus("recallStatusMessage","Recall History Request Completed.",false);
+        recallAddIn.uiModule.updateStatus("snackbar","Recall History Request Completed.",false);
         
         //Update database with new Recalls      
-        recallAddIn.uiModule.updateStatus("recallStatusMessage","Updating database with new Recalls...",false);
+        recallAddIn.uiModule.updateStatus("snackbar","Updating database with new Recalls...",false);
         let updateRecallTables = [];
         for(let i = 0; i < recallObject.vehicleList.length; i++){
           console.log(recallAddIn.myGeotabCache.masterTable.masterList[0][recallObject.vehicleList[i]].id,recallObject.recallList[i],recallObject.vehicleList[i]);
@@ -224,12 +224,12 @@ geotab.addin.testAddIn = function (api, state) {
         }
         try{
           const recallTablesUpdated = await Promise.all(updateRecallTables);      
-          recallAddIn.uiModule.updateStatus("recallStatusMessage","Finished updating Recall Tables.",false);
-          recallAddIn.uiModule.updateStatus("recallStatusMessage","Reloading Recall List",false);
+          recallAddIn.uiModule.updateStatus("snackbar","Finished updating Recall Tables.",false);
+          recallAddIn.uiModule.updateStatus("snackbar","Reloading Recall List",false);
           await _loadFromDatabase(api, groupsArray);
-          recallAddIn.uiModule.updateStatus("recallStatusMessage","All Done",false);
+          recallAddIn.uiModule.updateStatus("snackbar","All Done",false);
         }catch(err){
-          recallAddIn.uiModule.updateStatus("recallStatusMessage","Failed to update Recall Tables..",true);
+          recallAddIn.uiModule.updateStatus("snackbar","Failed to update Recall Tables..",true);
           console.log(err);
           console.log(recallObject);
         }
@@ -237,7 +237,7 @@ geotab.addin.testAddIn = function (api, state) {
       // else if(eligibleVehicleTypes.length == (Object.keys(recallAddIn.myGeotabCache.vehicles)).length ){
       // }
       else{
-        recallAddIn.uiModule.updateStatus("recallStatusMessage","Recall Info was Pulled in last 24 hours.  Please wait for 24 hours before Requesting New Recalls! ",false);
+        recallAddIn.uiModule.updateStatus("snackbar","Recall Info was Pulled in last 24 hours.  Please wait for 24 hours before Requesting New Recalls! ",false);
       }    
     }else{
       console.log("Failed to Update Master Table. Operation Aborted");
@@ -253,7 +253,7 @@ geotab.addin.testAddIn = function (api, state) {
       if(dbclear){
         document.getElementById("recall-"+recallId).querySelector(".checkmateListBuilderRow").classList.add("checkmateListBuilderRowInactive");
         recallAddIn.uiModule.closeRecallInfo();
-        recallAddin.uiModule.updateStatus("recallStatusMessage","Successfully cleared Recall ID: " + recallId,true);
+        recallAddIn.uiModule.updateStatus("snackbar","Successfully cleared Recall ID: " + recallId, false);
       }else{
         alert("Error clearing recall: " + recallId);        
       }
@@ -411,17 +411,11 @@ geotab.addin.testAddIn = function (api, state) {
         }
       }
       //Notification for Add Success  
-      let x = document.getElementById("snackbar");
-      x.className = "show";
-      x.innerText = "Reminder was added Successfully";
-      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      recallAddIn.uiModule.updateStatus("snackbar","Reminder was added Successfully",false);
 
     }catch(err){
       //Notification for Add failure  
-      let x = document.getElementById("snackbar");
-      x.className = "show";
-      x.innerText = "Failed to Add Reminder";
-      setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      recallAddIn.uiModule.updateStatus("snackbar","Failed to Add Reminder",true);
       console.log(err);
     }
   };

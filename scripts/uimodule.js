@@ -68,12 +68,23 @@ let _createRecallRow = function(searchable,recallInformation){
 		return a.textContent;
 	},
 	updateStatus = function(elementId,statusText,isError){
+		// const statusSpan = document.getElementById(elementId);
+		// statusSpan.textContent = decodeHTMLEntities(statusText);
+		// if(isError){
+		// 	statusSpan.classList.add("errorMessage");
+		// }else{
+		// 	statusSpan.classList.remove("errorMessage");
+		// }
 		const statusSpan = document.getElementById(elementId);
 		statusSpan.textContent = decodeHTMLEntities(statusText);
+		statusSpan.className = "show";
 		if(isError){
 			statusSpan.classList.add("errorMessage");
 		}else{
 			statusSpan.classList.remove("errorMessage");
+		}
+		if(elementId == "snackbar"){
+			setTimeout(function(){ statusSpan.className = statusSpan.className.replace("show", ""); }, 3000);
 		}
 	},
 	assignFunctionToButtonOnEvent = function(elementArray, functionToAssign, eventType){
