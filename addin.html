@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vehicle Recall</title>
+  
+  <link rel="stylesheet" href="https://my112.geotab.com/geotab/checkmate/app.less?skin=geotab">
+  
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- endbuild -->
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+  <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <!-- endbower -->
+  <!-- endbuild -->
+
+
+  <script src="scripts/uimodule.js"></script>
+  <script src="scripts/utilitiesModule.js"></script>
+  <script src="scripts/databasemodule.js"></script>
+  <script src="scripts/mygeotabmodule.js"></script>
+  <script src="scripts/nhtsaModule.js"></script>
+
+  <!-- build:js scripts/main.js -->
+  <script src="scripts/main.js"></script>
+  <!-- endbuild -->
+
+  
+
+  
+</head>
+
+<body>
+    <div id="recallAddInContainer">        
+        <div id="devicesId" style="visibility: visible;" data-page="">
+            <div id="recallLoaderContainer" class="hiddenElement">
+                <div class="recallOverlay"></div>
+                <div id="recallLoader"></div><div id="recallLoaderText">Loading...</div>
+            </div>
+            <div id="devices_toolbar" class="checkmateToolbarContainer">
+                <span class="checkmateToolbar">
+                    <input id="filterField" title="Filter List by Recall ID, Vehicle Make, Model, Year, or Recall Name" type="text" placeholder="Recall ID, Vehicle Make, Model, Year, or Recall Name" class="checkmateSearchTextbox" maxlength="150">
+                    <button class="geotabButton" id="toggleRecalls" data-showstatus="showActive" title="Toggle between All or Active Recalls">
+                        Showing: <span id="recallShowing">Active</span>
+                    </button>
+                    <button class="geotabButton" id="sortByAffected" title="Sort by Vehicles Affected" onclick="recallAddIn.uiModule.sortRecallTable(this)">
+                        Sort by Vehicle Count
+                    </button>
+                    <button class="geotabButton" id="requestRecalls" title="Pull recalls from NHTSA">
+                        Request New Recalls
+                    </button>
+                    <button class="geotabButton" id="datetimeTesting" title="Test Date Conversion">
+                        Test
+                    </button>
+            </div>
+
+
+            <div class="checkmatePageHeader">
+                <h1 class="checkmatePageName">Fleet Recalls <span class="subdued">Beta</span></h1>
+                <div class="pageNameSecondary">
+                    <h3 id="devices_total" class="pageTotalHeading"><span id="outstandingRecalls"></span> Recalls</h3>
+                </div>
+            </div>
+
+            <div id="recallsListBuilder" class="checkmateListBuilder">
+                <h1 class="subdued">No recalls found</h1>
+            </div>
+
+            
+
+            <div id="recallInfoContainer" class="hiddenElement">
+                <div class="recallOverlay"></div>
+                <div class="checkmateListBuilder" id="recallInfoDiv">
+                    <table class="checkmateListTable" id="recallInfoTable">
+                        <tbody>
+                            <tr class="checkmateListBuilderHeading">
+                                <td colspan="2">Recall ID: <span id="recallInfoTable-id"></span></td>
+                            </tr>
+                            <tr class="checkmateListBuilderRow noAction">
+                                <td>Vehicle Type:</td>
+                                <td id="recallInfoTable-vehicle"></td>
+                            </tr>
+                            <tr class="checkmateListBuilderRow noAction">
+                                <td>Component:</td>
+                                <td id="recallInfoTable-component"></td>
+                            </tr>
+                            <tr class="checkmateListBuilderRow noAction nhtsaPull">
+                                <td>Manufacturer:</td>
+                                <td id="recallInfoTable-manufacturer"></td>
+                            </tr>
+                            <tr class="checkmateListBuilderRow noAction nhtsaPull">
+                                <td>Summary:</td>
+                                <td id="recallInfoTable-summary"></td>
+                            </tr>
+                            <tr class="checkmateListBuilderRow noAction nhtsaPull">
+                                <td>Consequences:</td>
+                                <td id="recallInfoTable-consequences"></td>
+                            </tr>
+                            <tr class="checkmateListBuilderRow noAction nhtsaPull">
+                                <td>Remedy:</td>
+                                <td id="recallInfoTable-remedy"></td>
+                            </tr>
+                            <tr><td>
+                                <div class="geotabSecondaryFill recallStatusBar">
+                                    <label>Status: <span id="NHTSAStatus">...</span></label>
+                                </div>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                    <table class="checkmateListTable" id="vehicleInfoTable">
+                        <tbody>
+                            <tr><td><div class="checkmateListBuilderHeading">Vehicle List</div><span id="totalVehicles"></span></td></tr>                            
+                        </tbody>
+                    </table>                
+                    <div id="recallInfoBottomRow" class="geotabSecondaryFill">                        
+                        <div class="recallStatusBar">
+                            <label>Status: <span id="maintenanceStatus">...</span></label>
+                            <div id="recallInfoPaginationDiv"></div>
+                        </div>
+                        <div class="horizontalButtonSet" id="recallInfoBottomButtons">
+                            <div id="regularButtons">
+                                <button class="geotabButton" onclick="recallAddIn.uiModule.closeRecallInfo()">Close</button>
+                                <button class="geotabButton" id="recallClearButton" data-vehiclekey="" data-recallid="">Clear Recall</button>
+                                <button class="geotabButton" id="recallMaintenanceReminder" style="display:none;">Create Maintenance Reminder</button>
+                                <button class="geotabButton" id="recallPrintPDF" data-vehiclekey="" data-recallid="">Download PDF</button>
+                                <button class="geotabButton" id="recallDownloadCSV" data-vehiclekey="" data-recallid="">Download CSV</button>
+                            </div>
+                            <div id="reminderButton">                               
+                                <button class="geotabButton" id="addAllReminders" data-vehiclekey="" data-recallid="" title="Add Maintenance Reminder for all Vehicles">Add Maintenance</button>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="addReminderContainer" class="hiddenElement">
+                <p>Jappy new Jear!</p>
+            </div>
+        </div>
+
+        <div id="recallMainStatusBar">
+            <div id="recallStatusMessageContainer">
+                <span id="recallStatusMessage"></span>                
+                <span id="statusMessageCounter"></span>                
+                <span id="statusMessageTotal"></span>
+            </div>
+            <div id="recallProgressbar">
+                <div id="recallProgressbar-colorful"></div>
+                <div id="recallProgressbar-inactive"></div>            
+            </div>  
+        </div>
+        <style id="recallTextSearchStyle"></style>
+        <style id="recallStatusSearchStyle">#recallsListBuilder .checkmateListBuilderRowInactive{ display: none;}</style>
+    
+        <div id="reminderModal" class="w3-modal w3-animate-opacity">
+            <div class="w3-modal-content w3-card-4">
+                <header class="w3-container w3-teal"> 
+                <span onclick="document.getElementById('reminderModal').style.display='none';document.getElementById('reminderRuleDate').value = ''"class="w3-button w3-large w3-display-topright">&times;</span>
+                <h2>Add Reminder Rule</h2>
+                </header>
+                <div class="w3-container">
+                    <fieldset class="geotabFieldset">
+                        <div class="geotabField">
+                            <label>Description:</label>
+                            <input type="text" class="geotabFormEditField" id="reminderRuleDescription" maxlength="255" disabled>
+                        </div>
+                        <div class="geotabField">
+                            <label>Type:</label>
+                            <input placeholder="" type="text" class="geotabFormEditField" id="reminderRuleType" disabled>
+                        </div>
+                        <div class="geotabField">
+                            <label>Vehicle:</label>
+                            <input placeholder="" type="text" class="geotabFormEditField" maxlength="255" id="reminderRuleVehicle" data-vehicleId="" disabled>
+                        </div>
+                        <div class="geotabField">
+                            <label>VIN:</label>
+                            <input placeholder="" type="text" class="geotabFormEditField" maxlength="255" id="reminderRuleVin" disabled>
+                        </div>
+                        <div class="geotabField">
+                            <label>Date:</label>
+                            <input autocomplete="off" type="text" class="geotabFormEditField" id="reminderRuleDate" data-language="en" />     
+                        </div>
+                    </fieldset>
+                </div>
+                <footer class="w3-footer-container w3-teal">
+                    <button class="geotabButton" id="recallSubmitReminder" data-vehiclekey="" data-recallid="">Save</button>
+                </footer>
+            </div>
+        </div>
+                       
+        <script>
+            // Get the modal
+            var modal = document.getElementById('reminderModal');
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+              if (event.target == modal) {
+                document.getElementById("reminderRuleDate").value = "";
+                modal.style.display = "none";
+                console.log(picker);
+                console.log(picker.gotoToday());
+              }
+            }
+        </script>
+        <script>
+            var picker = new Pikaday({ field: document.getElementById('reminderRuleDate')});
+        </script>
+    </div>
+    <div id="snackbar">Snackbar message..</div>   
+</body>
+
+</html>

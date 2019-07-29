@@ -1,0 +1,19 @@
+{
+  "name": "RecallAddIn",
+  "supportEmail": "mauriciomuniz@geotab.com",
+  "version": "1.0.0",
+  "items": [{
+    "url": "addin.html",
+    "path": "EngineMaintenanceLink/",
+    "icon": "images/icon.svg",
+    "menuName": {
+      "en": "Recall"
+    }
+  }],
+  "dev": {
+    "root": "addIn",
+    "dist": {
+      "host": "https://www.example.com/myaddin/"
+    }
+  }
+}
