@@ -427,8 +427,8 @@ let _createRecallRow = function(searchable,recallInformation){
 					switching = true;
 				}
 			}
-			sortButton.setAttribute("data-order", "descending");
-			sortButton.innerText = "Sort by Vehicle Count: Descending";
+			// sortButton.setAttribute("data-order", "descending");
+			// sortButton.innerText = "Sort by Vehicle Count: Descending";
 		}
 		else{
 			while (switching) {
@@ -447,8 +447,8 @@ let _createRecallRow = function(searchable,recallInformation){
 					switching = true;
 				}
 			}
-			sortButton.setAttribute("data-order", "ascending");
-			sortButton.innerText = "Sort by Vehicle Count: Ascending";
+			// sortButton.setAttribute("data-order", "ascending");
+			// sortButton.innerText = "Sort by Vehicle Count: Ascending";
 		}
 	};
 return{

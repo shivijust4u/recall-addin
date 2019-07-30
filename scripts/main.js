@@ -15,11 +15,26 @@ geotab.addin.testAddIn = function (api, state) {
             searchStyle.innerHTML = "";
             return;
         }
+        console.log(rawValue);
         let rawValueList = rawValue.split(" ");
+        console.log(rawValueList);
+        console.log(searchStyle);
         searchStyle.innerHTML = ".searchableRow{ display: none; }";
+        let matchingRowsCount = 0;
         for(let i = 0; i < rawValueList.length; i++){	
             searchStyle.innerHTML = searchStyle.innerHTML + ".searchableRow[data-index*=\"" + rawValueList[i] + "\"]{ display: table-row !important; }";
+            let newCount = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").length;
+            console.log(newCount);
+            if(newCount>matchingRowsCount){
+              matchingRowsCount = newCount;
+            }
+
         }
+        console.log(matchingRowsCount);
+        let totalRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("searchableRow").length;
+        console.log(totalRecalls);
+        document.getElementById("outstandingRecalls").textContent = matchingRowsCount;
+
     });
     document.getElementById('toggleRecalls').addEventListener("click", function(event){
         let currentStatus = this.getAttribute("data-showstatus"),

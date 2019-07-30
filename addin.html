@@ -9,6 +9,7 @@
   <title>Vehicle Recall</title>
   
   <link rel="stylesheet" href="https://my112.geotab.com/geotab/checkmate/app.less?skin=geotab">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
   <!-- build:css styles/vendor.css -->
   <!-- bower:css -->
@@ -56,15 +57,26 @@
                     <button class="geotabButton" id="toggleRecalls" data-showstatus="showActive" title="Toggle between All or Active Recalls">
                         Showing: <span id="recallShowing">Active</span>
                     </button>
-                    <button class="geotabButton" id="sortByAffected" title="Sort by Vehicles Affected" data-order="ascending" onclick="recallAddIn.uiModule.sortRecallTable(this)">
+                    <!-- <button class="geotabButton" id="sortByAffected" title="Sort by Vehicles Affected" data-order="ascending" onclick="recallAddIn.uiModule.sortRecallTable(this)">
                         Sort by Vehicle Count: Ascending
-                    </button>
+                    </button> -->
+                    <div class="dropdown" >
+                        <button class="geotabButton" id="dropButton" title="Sort by Vehicles Affected" onclick="sortingDropdown()">
+                            Sort by Vehicle Count  <i class="fa fa-caret-down"     style="margin-left: 1px;"></i>
+                        </button>
+                        <div class="dropdown-content" id="sortByDropdown">
+                            <button data-order="ascending" onclick="recallAddIn.uiModule.sortRecallTable(this)">Ascending</button>
+                            <button data-order="descending" onclick="recallAddIn.uiModule.sortRecallTable(this)">Descending</button>
+                        </div>
+                    </div>
+                    
                     <button class="geotabButton" id="requestRecalls" title="Pull recalls from NHTSA">
                         Request New Recalls
                     </button>
                     <button class="geotabButton" id="datetimeTesting" title="Test Date Conversion">
                         Test
                     </button>
+                </span>
             </div>
 
 
@@ -213,9 +225,24 @@
                 console.log(picker.gotoToday());
               }
             }
-        </script>
-        <script>
+            //Initializing DatePicker
             var picker = new Pikaday({ field: document.getElementById('reminderRuleDate')});
+
+            /* When the user clicks on the button, 
+            toggle between hiding and showing the dropdown content */
+            function sortingDropdown() {
+            document.getElementById("sortByDropdown").classList.toggle("show");
+            }
+
+            // Close the dropdown if the user clicks outside of it
+            window.onclick = function(e) {
+                if (!e.target.matches('#dropButton')) {
+                var myDropdown = document.getElementById("sortByDropdown");
+                    if (myDropdown.classList.contains('show')) {
+                    myDropdown.classList.remove('show');
+                    }
+                }
+            }
         </script>
     </div>
     <div id="snackbar">Snackbar message..</div>   
