@@ -403,29 +403,53 @@ let _createRecallRow = function(searchable,recallInformation){
         }
 	},
 	sortRecallTable = function(sortButton){
+		console.log(sortButton.getAttribute("data-order"));
 		let table = document.getElementById("recallsListBuilder").querySelector(".checkmateListTable"), 
 			rows = table.getElementsByTagName("TR"), 
 			switching = true, 
 			x, y, i,
-			shouldSwitch = false;
-
-		while (switching) {
-			switching = false;
-			for (i = 0; i < (rows.length - 1); i++) {
-				shouldSwitch = false;
-				x = rows[i].getAttribute("data-vehiclecount");
-				y = rows[i + 1].getAttribute("data-vehiclecount");			
-				if (x < y) {				
-					shouldSwitch = true;
-					break;
+			shouldSwitch = false,
+			order = sortButton.getAttribute("data-order");
+		if(order == "ascending"){
+			while (switching) {
+				switching = false;
+				for (i = 0; i < (rows.length - 1); i++) {
+					shouldSwitch = false;
+					x = parseInt(rows[i].getAttribute("data-vehiclecount"));
+					y = parseInt(rows[i + 1].getAttribute("data-vehiclecount"));
+					if (x > y) {				
+						shouldSwitch = true;
+						break;
+					}
+				}
+				if (shouldSwitch) {
+					rows[i].parentNode.insertBefore(rows[i], rows[i+2]);
+					switching = true;
 				}
 			}
-			if (shouldSwitch) {
-				rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-				switching = true;
-			}
+			sortButton.setAttribute("data-order", "descending");
+			sortButton.innerText = "Sort by Vehicle Count: Descending";
 		}
-		sortButton.disabled = true;
+		else{
+			while (switching) {
+				switching = false;
+				for (i = 0; i < (rows.length - 1); i++) {
+					shouldSwitch = false;
+					x = parseInt(rows[i].getAttribute("data-vehiclecount"));
+					y = parseInt(rows[i + 1].getAttribute("data-vehiclecount"));
+					if (x < y) {				
+						shouldSwitch = true;
+						break;
+					}
+				}
+				if (shouldSwitch) {
+					rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+					switching = true;
+				}
+			}
+			sortButton.setAttribute("data-order", "ascending");
+			sortButton.innerText = "Sort by Vehicle Count: Ascending";
+		}
 	};
 return{
         bindEventFunction : assignFunctionToButtonOnEvent,

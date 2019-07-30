@@ -56,8 +56,8 @@
                     <button class="geotabButton" id="toggleRecalls" data-showstatus="showActive" title="Toggle between All or Active Recalls">
                         Showing: <span id="recallShowing">Active</span>
                     </button>
-                    <button class="geotabButton" id="sortByAffected" title="Sort by Vehicles Affected" onclick="recallAddIn.uiModule.sortRecallTable(this)">
-                        Sort by Vehicle Count
+                    <button class="geotabButton" id="sortByAffected" title="Sort by Vehicles Affected" data-order="ascending" onclick="recallAddIn.uiModule.sortRecallTable(this)">
+                        Sort by Vehicle Count: Ascending
                     </button>
                     <button class="geotabButton" id="requestRecalls" title="Pull recalls from NHTSA">
                         Request New Recalls
