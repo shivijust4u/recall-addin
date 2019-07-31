@@ -106,37 +106,22 @@ div#recallProgressbar-colorful{
     background-image: linear-gradient(to right, #EA1F56, #FDCD4C, #93C83D, #2EBEF9);    
     box-shadow:inset 0px 2px 8px rgba(255, 255, 255, .5), inset -1px -1px 0px rgba(0, 0, 0, .2);
 }
-
-.dropdown {
-    float: left;
-    overflow: hidden;
-    /* width:25%; */
-    
+.dropdown{
+    width: 100%;
+    max-width: 185.6px;
 }
-
-/* #dropButton{
-    width:98%;
-} */
-/* 
-.dropdown .dropbtn {
-    cursor: pointer;
-    font-size: 16px;  
-    border: none;
-    outline: none;
-    color: white;
-    padding: 14px 16px;
-    background-color: inherit;
-    font-family: inherit;
-    margin: 0;
-} */
-/* .navbar a:hover, .dropdown:hover .dropbtn, .dropbtn:focus {
-    background-color: red;
-} */
+.menubar{
+    display:flex;
+}
+.menubar div{
+    margin-right:3px;
+}
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width:inherit;
     z-index: 1;
 }
 .dropdown-content button {
@@ -149,11 +134,11 @@ div#recallProgressbar-colorful{
     text-decoration: none;
     line-height: 18px;
     width: 100%;
-    display: inline-block;
+    /* display: inline-block; */
     position: relative;
     padding: 6px 11px;
     overflow-wrap: break-word;
-    word-wrap: break-word;
+    /* word-wrap: break-word; */
     word-break: break-word;
 }
 .dropdown-content button:hover, button:focus {
@@ -164,7 +149,8 @@ div#recallProgressbar-colorful{
 }
 
 .show {
-    display: block;
+    display: table-cell;
+    position: inherit;
 }
 
 #recallInfoContainer{
@@ -187,9 +173,6 @@ div#recallProgressbar-colorful{
 }
 .preNHTSA .nhtsaPull{
     display:none;
-}
-#filterField{
-    width: 25%;
 }
 #recallInfoTable,
 #vehicleInfoTable{
