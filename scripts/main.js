@@ -10,33 +10,59 @@ geotab.addin.testAddIn = function (api, state) {
             statusStyle = document.getElementById('recallStatusSearchStyle');
     
     document.getElementById("filterField").addEventListener("keyup", function(event){
-        let rawValue = this.value.replace(/\W+/g," ").toLowerCase();
-        if (!rawValue) {
-            searchStyle.innerHTML = "";
-            return;
+      //TODO: Make this a function (Filter Recalls)
+      let rawValue = this.value.replace(/\W+/g," ").toLowerCase().trim();
+      if (!rawValue) {
+          searchStyle.innerHTML = "";
+          //TODO: Call Toggle Recalls Function
+          return;
+      }
+      console.log(rawValue);
+      let activeToggle =  document.getElementById('toggleRecalls').getAttribute   ("data-showstatus"), 
+        rawValueList = rawValue.split(" "), 
+        matchingActiveRowsCount = 0,
+        matchingInactiveRowsCount = 0,
+        rowHash = {},
+        inactiveRowHash = {};
+      console.log(rawValueList);
+      console.log(searchStyle);
+      searchStyle.innerHTML = ".searchableRow{ display: none; }";
+      for(let i = 0; i < rawValueList.length; i++){	
+        searchStyle.innerHTML = searchStyle.innerHTML + ".searchableRow[data-index*=\"" + rawValueList[i] + "\"]{ display: table-row !important; }";
+        let totalRowCount = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").length,
+          inactiveRowCount =  document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").length;
+        
+        for(let j=0; j<totalRowCount; j++){
+          let hashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").item(j).getAttribute("id");
+          if(rowHash[hashKey]){
+            rowHash[hashKey] += 1;
+          }
+          else{
+            rowHash[hashKey] = 1;
+          }
         }
-        console.log(rawValue);
-        let rawValueList = rawValue.split(" ");
-        console.log(rawValueList);
-        console.log(searchStyle);
-        searchStyle.innerHTML = ".searchableRow{ display: none; }";
-        let matchingRowsCount = 0;
-        for(let i = 0; i < rawValueList.length; i++){	
-            searchStyle.innerHTML = searchStyle.innerHTML + ".searchableRow[data-index*=\"" + rawValueList[i] + "\"]{ display: table-row !important; }";
-            let newCount = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").length;
-            console.log(newCount);
-            if(newCount>matchingRowsCount){
-              matchingRowsCount = newCount;
+        if(activeToggle == "showActive"){
+        for(let k=0; k<inactiveRowCount; k++){
+            let inactiveHashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").item(k).getAttribute("id");
+            if(inactiveRowHash[inactiveHashKey]){
+              inactiveRowHash[inactiveHashKey] += 1;
             }
-
+            else{
+              inactiveRowHash[inactiveHashKey] = 1;
+            }
+          }
         }
-        console.log(matchingRowsCount);
-        let totalRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("searchableRow").length;
-        console.log(totalRecalls);
-        document.getElementById("outstandingRecalls").textContent = matchingRowsCount;
+      }
+      console.log(matchingActiveRowsCount);
+      matchingActiveRowsCount = Object.keys(rowHash).length;
+      console.log(matchingActiveRowsCount);
+      console.log(rowHash);
+      matchingInactiveRowsCount = Object.keys(inactiveRowHash).length;
+      document.getElementById("outstandingRecalls").textContent = matchingActiveRowsCount-matchingInactiveRowsCount;
 
     });
     document.getElementById('toggleRecalls').addEventListener("click", function(event){
+        //TODO: Make this a function (Toggle Recalls)
         let currentStatus = this.getAttribute("data-showstatus"),
             inactiveRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("checkmateListBuilderRowInactive").length,
             totalRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("searchableRow").length;
@@ -45,11 +71,13 @@ geotab.addin.testAddIn = function (api, state) {
             document.getElementById("recallShowing").textContent = "Active";
             statusStyle.innerHTML = "#recallsListBuilder .checkmateListBuilderRowInactive{ display: none;}";
             document.getElementById("outstandingRecalls").textContent = totalRecalls - inactiveRecalls;
+             //TODO: Call Filter Recalls Function
         }else{
             this.setAttribute("data-showstatus", "showAll");
             document.getElementById("recallShowing").textContent = "All";
             statusStyle.innerHTML = "";
             document.getElementById("outstandingRecalls").textContent = totalRecalls;
+             //TODO: Call Filter Recalls Function
         }
     });
   },
