@@ -109,6 +109,7 @@ div#recallProgressbar-colorful{
 .dropdown{
     width: 100%;
     max-width: 185.6px;
+    display: inline-block;
 }
 .menubar{
     display:flex;
@@ -121,7 +122,7 @@ div#recallProgressbar-colorful{
     position: absolute;
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    width:inherit;
+    width:auto;
     z-index: 1;
 }
 .dropdown-content button {
@@ -149,8 +150,8 @@ div#recallProgressbar-colorful{
 }
 
 .show {
-    display: table-cell;
-    position: inherit;
+    display: inherit;
+    position: absolute;
 }
 
 #recallInfoContainer{

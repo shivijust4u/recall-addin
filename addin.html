@@ -54,13 +54,10 @@
             <div id="devices_toolbar" class="checkmateToolbarContainer">
                 <span class="checkmateToolbar">
                     <div class="menubar">
-                    <div style="width:25%;"><input id="filterField" title="Filter List by Recall ID, Vehicle Make, Model, Year, or Recall Name" type="text" placeholder="Recall ID, Vehicle Make, Model, Year, or Recall Name" class="checkmateSearchTextbox" maxlength="150" style="width:100%;"></div> 
-                    <div><button class="geotabButton" id="toggleRecalls" data-showstatus="showActive" title="Toggle between All or Active Recalls">
+                    <div style="width:25%;"><input id="filterField" title="Filter List by Recall ID, Vehicle Make, Model, Year, or Recall Name" type="text" placeholder="Recall ID, Vehicle Make, Model, Year, or Recall Name" class="checkmateSearchTextbox" maxlength="150" style="width:100%;" onkeyup="recallAddIn.uiModule.filterRecallTable(this)"></div> 
+                    <div><button class="geotabButton" id="toggleRecalls" data-showstatus="showActive" onclick="recallAddIn.uiModule.showActive(this)" title="Toggle between All or Active Recalls">
                         Showing: <span id="recallShowing">Active</span>
                     </button></div>
-                    <!-- <button class="geotabButton" id="sortByAffected" title="Sort by Vehicles Affected" data-order="ascending" onclick="recallAddIn.uiModule.sortRecallTable(this)">
-                        Sort by Vehicle Count: Ascending
-                    </button> -->
                     <div class="dropdown" >
                         <button class="geotabButton" id="dropButton" title="Sort by Vehicles Affected" onclick="sortingDropdown()" style="width:100%;">
                             Sort by Vehicle Count  <i class="fa fa-caret-down"     style="margin-left: 2px;"></i>

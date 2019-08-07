@@ -450,6 +450,87 @@ let _createRecallRow = function(searchable,recallInformation){
 			// sortButton.setAttribute("data-order", "ascending");
 			// sortButton.innerText = "Sort by Vehicle Count: Ascending";
 		}
+	},
+	showActiveRecalls = function(showActiveButton){
+		// console.log(showActiveButton);
+		const searchStyle = document.getElementById('recallTextSearchStyle'),
+		statusStyle = document.getElementById('recallStatusSearchStyle');
+
+		let currentStatus = showActiveButton.getAttribute("data-showstatus"),
+            inactiveRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("checkmateListBuilderRowInactive").length,
+            totalRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("searchableRow").length;
+        if(currentStatus == "showAll"){
+            showActiveButton.setAttribute("data-showstatus", "showActive");
+            document.getElementById("recallShowing").textContent = "Active";
+            statusStyle.innerHTML = "#recallsListBuilder .checkmateListBuilderRowInactive{ display: none;}";
+            document.getElementById("outstandingRecalls").textContent = totalRecalls - inactiveRecalls;
+			filterRecallTable(document.getElementById("filterField"));
+        }else{
+            showActiveButton.setAttribute("data-showstatus", "showAll");
+            document.getElementById("recallShowing").textContent = "All";
+            statusStyle.innerHTML = "";
+            document.getElementById("outstandingRecalls").textContent = totalRecalls;
+			filterRecallTable(document.getElementById("filterField"));
+        }
+	},
+	filterRecallTable = function(keyUpField){
+		const searchStyle = document.getElementById('recallTextSearchStyle'),
+			statusStyle = document.getElementById('recallStatusSearchStyle');
+		let rawValue =  keyUpField.value.replace(/\W+/g," ").toLowerCase().trim();
+		if (!rawValue) {
+			searchStyle.innerHTML = "";
+			let currentStatus = document.getElementById("toggleRecalls").getAttribute("data-showstatus"),
+            inactiveRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("checkmateListBuilderRowInactive").length,
+			totalRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("searchableRow").length;
+			if(currentStatus == "showAll"){
+				document.getElementById("outstandingRecalls").textContent = totalRecalls;
+			}else{
+				document.getElementById("outstandingRecalls").textContent = totalRecalls - inactiveRecalls;
+			}
+			return;
+		}
+		// console.log(rawValue);
+		let activeToggle =  document.getElementById('toggleRecalls').getAttribute   ("data-showstatus"), 
+		  rawValueList = rawValue.split(" "), 
+		  matchingActiveRowsCount = 0,
+		  matchingInactiveRowsCount = 0,
+		  rowHash = {},
+		  inactiveRowHash = {};
+		// console.log(rawValueList);
+		// console.log(searchStyle);
+		searchStyle.innerHTML = ".searchableRow{ display: none; }";
+		for(let i = 0; i < rawValueList.length; i++){	
+		  searchStyle.innerHTML = searchStyle.innerHTML + ".searchableRow[data-index*=\"" + rawValueList[i] + "\"]{ display: table-row !important; }";
+		  let totalRowCount = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").length,
+			inactiveRowCount =  document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").length;
+		  
+		  for(let j=0; j<totalRowCount; j++){
+			let hashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").item(j).getAttribute("id");
+			if(rowHash[hashKey]){
+			  rowHash[hashKey] += 1;
+			}
+			else{
+			  rowHash[hashKey] = 1;
+			}
+		  }
+		  if(activeToggle == "showActive"){
+		  	for(let k=0; k<inactiveRowCount; k++){
+			  let inactiveHashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").item(k).getAttribute("id");
+			  if(inactiveRowHash[inactiveHashKey]){
+				inactiveRowHash[inactiveHashKey] += 1;
+			  }
+			  else{
+				inactiveRowHash[inactiveHashKey] = 1;
+			  }
+			}
+		  }
+		}
+		// console.log(matchingActiveRowsCount);
+		matchingActiveRowsCount = Object.keys(rowHash).length;
+		// console.log(matchingActiveRowsCount);
+		// console.log(rowHash);
+		matchingInactiveRowsCount = Object.keys(inactiveRowHash).length;
+		document.getElementById("outstandingRecalls").textContent = matchingActiveRowsCount-matchingInactiveRowsCount;
 	};
 return{
         bindEventFunction : assignFunctionToButtonOnEvent,
@@ -462,6 +543,8 @@ return{
 		changeVehiclePage: changeVehiclePage,
 		updateStatus: updateStatus,
 		sortRecallTable: sortRecallTable,
+		filterRecallTable: filterRecallTable,
+		showActive: showActiveRecalls, 
 		openMaintenance: openMaintenance
 	};
 }(); 
