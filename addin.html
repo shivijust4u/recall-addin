@@ -215,15 +215,6 @@
         <script>
             // Get the modal
             var modal = document.getElementById('reminderModal');
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-              if (event.target == modal) {
-                document.getElementById("reminderRuleDate").value = "";
-                modal.style.display = "none";
-                console.log(picker);
-                console.log(picker.gotoToday());
-              }
-            }
             //Initializing DatePicker
             var picker = new Pikaday({ field: document.getElementById('reminderRuleDate')});
 
@@ -240,6 +231,13 @@
                     if (myDropdown.classList.contains('show')) {
                     myDropdown.classList.remove('show');
                     }
+                }
+                if (event.target == modal) {
+                    // When the user clicks anywhere outside of the modal, close it
+                    document.getElementById("reminderRuleDate").value = "";
+                    modal.style.display = "none";
+                    console.log(picker);
+                    console.log(picker.gotoToday());
                 }
             }
         </script>
