@@ -485,6 +485,7 @@ geotab.addin.testAddIn = function (api, state) {
 
           document.getElementById("datetimeTesting").addEventListener("click",function(){
             console.log("Testing DateTime");
+            recallAddIn.timeZoneConversionModule.userTimeZoneOffset(api);
             // var test = await  recallAddIn.userTimeZoneOffsetModule.getUserTimeZoneOffset(api);
           }); 
 
