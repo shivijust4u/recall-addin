@@ -314,7 +314,7 @@ geotab.addin.testAddIn = function (api, state) {
     //TODO:
     //Modify reminderDate to include Offsets
     reminderDate = document.getElementById("reminderRuleDate").value,
-    vehicleKey = document.getElementById("addAllReminders").getAttribute('data-vehiclekey');
+    timeZoneOffset = await recallAddIn.timeZoneConversionModule.userTimeZoneOffset(api),vehicleKey = document.getElementById("addAllReminders").getAttribute('data-vehiclekey');
       
     let eventRuleEntity,eventRuleId,eventTypeId,addVehicleToEventRuleId, eventOccurenceEntity, reminderButton, vehicleArray=[], selectedReminderRuleType = "", selectedReminderRule = "", ruleExists = false;
 
@@ -336,7 +336,7 @@ geotab.addin.testAddIn = function (api, state) {
       console.log("Rule type exits! Add reminder rule now!");
       console.log(reminderRules);
       console.log(reminderDescription);
-      eventRuleEntity = {"name":reminderDescription.substring(0,50).trim(),"eventType":{"id":selectedReminderRuleType.id},"eventDate": new Date(reminderDate).toISOString()};
+      eventRuleEntity = {"name":reminderDescription.substring(0,50).trim(),"eventType":{"id":selectedReminderRuleType.id},"eventDate": new Date(new Date(reminderDate).setHours(-timeZoneOffset.hours,-timeZoneOffset.minutes)).toISOString()};
       console.log(eventRuleEntity);   
 
       for(let i=0; i<reminderRules.length; i++){
@@ -353,7 +353,7 @@ geotab.addin.testAddIn = function (api, state) {
       console.log("Rule Type does not exist!");
       eventTypeId = await recallAddIn.myGeotabModule.addEventType(api,  {"name":reminderType});
       console.log(eventTypeId);
-      eventRuleEntity = {"name":reminderDescription.substring(0,50).trim(),"eventType":{"id":eventTypeId},"eventDate": new Date(reminderDate).toISOString()};
+      eventRuleEntity = {"name":reminderDescription.substring(0,50).trim(),"eventType":{"id":eventTypeId},"eventDate": new Date(new Date(reminderDate).setHours(-timeZoneOffset.hours,-timeZoneOffset.minutes)).toISOString()};
       console.log(eventRuleEntity);     
     }
 
@@ -417,7 +417,7 @@ geotab.addin.testAddIn = function (api, state) {
         if (vehicleArray[i] == odometerList[j][0].device.id){
           for(let k = 0; k < enginehoursList.length; k++){
             if (vehicleArray[i] == enginehoursList[k][0].device.id){
-              entityList.push({device:{id:vehicleArray[i],name:vehicle.name},eventRule:{id:eventRuleId,name:reminderDescription.substring(0,50).trim()},eventDate: new Date(reminderDate).toISOString(),currentOdometer:recallAddIn.utilitiesModule.padHex(Math.round(odometerList[j][0].data).toString(16)),adjustedOdometer:recallAddIn.utilitiesModule.padHex(Math.round(odometerList[j][0].data).toString(16)),currentEngineHours:recallAddIn.utilitiesModule.convertSecondsToHhMm(enginehoursList[k][0].data),adjustedEngineHours:recallAddIn.utilitiesModule.convertSecondsToHhMm(enginehoursList[k][0].data),active:true});
+              entityList.push({device:{id:vehicleArray[i],name:vehicle.name},eventRule:{id:eventRuleId,name:reminderDescription.substring(0,50).trim()},eventDate: new Date(new Date(reminderDate).setHours(-timeZoneOffset.hours,-timeZoneOffset.minutes)).toISOString(),currentOdometer:recallAddIn.utilitiesModule.padHex(Math.round(odometerList[j][0].data).toString(16)),adjustedOdometer:recallAddIn.utilitiesModule.padHex(Math.round(odometerList[j][0].data).toString(16)),currentEngineHours:recallAddIn.utilitiesModule.convertSecondsToHhMm(enginehoursList[k][0].data),adjustedEngineHours:recallAddIn.utilitiesModule.convertSecondsToHhMm(enginehoursList[k][0].data),active:true});
               break;
             }
           }
@@ -485,7 +485,10 @@ geotab.addin.testAddIn = function (api, state) {
 
           document.getElementById("datetimeTesting").addEventListener("click",function(){
             console.log("Testing DateTime");
-            recallAddIn.timeZoneConversionModule.userTimeZoneOffset(api);
+            var test =  recallAddIn.timeZoneConversionModule.userTimeZoneOffset(api);
+            test.then(function(result) {
+              console.log(result.hours);
+            })
             // var test = await  recallAddIn.userTimeZoneOffsetModule.getUserTimeZoneOffset(api);
           }); 
 

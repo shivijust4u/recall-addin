@@ -3,28 +3,30 @@ window.recallAddIn.timeZoneConversionModule = function(){
 
     var api,sessionInfo,availableTimeZones,dayLightSavingOffset,userTimeZoneOffset = new Object(),weekday = new Array("Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday");
 
-    const recallAddInId = "axiXYeFO_FUaC8eVVXaARYQ", 
-        recallMasterTableId = "aedbb15d-851b-2b95-c2aw",
-        getUserSession = function(apiObject){
+    const getUserSession = function(apiObject){
+        const userTimeZoneOffsetPromise = new Promise((resolve, reject) => {
             console.log("I am here!");
             api = apiObject;
             api.getSession(function(session){sessionInfo = session;});
             console.log("Session Info: ", sessionInfo);
-            getTimeZones();
+            getTimeZones(resolve, reject);
+            });
+            return  userTimeZoneOffsetPromise;   
         },
         //Get All Available Time Zones in the Database
-        getTimeZones = function(){
+        getTimeZones = function(resolve, reject){
             api.call("GetTimeZones", {
             }, function(result) {
                 console.log("All System TimeZones: ", result);
                 availableTimeZones = result;
-                getUserTimeZoneId();
+                getUserTimeZoneId(resolve, reject);
             }, function(e) {
                 console.error("Failed:", e);
+                reject(e);
             });    
         },
         //Get the Current User's Time Zone
-        getUserTimeZoneId = function (){
+        getUserTimeZoneId = function (resolve, reject){
             api.call("Get", {
                 "typeName": "User",
                 "resultsLimit": 10,
@@ -33,48 +35,53 @@ window.recallAddIn.timeZoneConversionModule = function(){
                 }
             }, function(result) {
                 console.log("User Time Zone: ", result[0].timeZoneId);
-                getTimeZoneOffset(result[0].timeZoneId);
+                getTimeZoneOffset(result[0].timeZoneId, resolve, reject);
             }, function(e) {
                 console.error("Failed:", e);
+                reject(e);
             });        
         }, 
         //Calculate the Offset based on User's Time Zone
-        getTimeZoneOffset= function (timeZoneId){
+        getTimeZoneOffset= function (timeZoneId, resolve, reject){
             for(var i=0; i<availableTimeZones.length; i++){
                 if(availableTimeZones[i].id == timeZoneId){
                     console.log("found matching time zone");
                     userTimeZoneOffset = availableTimeZones[i];
                     console.log("UserTimeZoneOffset:", userTimeZoneOffset);
                     if(userTimeZoneOffset.isDaylightSavingTimeSupported){
-                        getDayLightSavingRules(timeZoneId);      
+                        getDayLightSavingRules(timeZoneId, resolve, reject);      
                     }
                     else{
-                        calculateTotalOffset();
+                        calculateTotalOffset(resolve);
                     }
                 }
             }
         },
         //Get Daylight Saving Rules
-        getDayLightSavingRules = function (timeZoneId){
+        getDayLightSavingRules = function (timeZoneId, resolve, reject){
             api.call("GetDaylightSavingRules", {
                 "timeZoneId": timeZoneId
             }, function(result) {
                 console.log("DayLightSaving Rule: ", result);
                 console.log(result.adjustmentRules[1].daylightTransitionStart.month);
-                calculatingAdjustment(result.adjustmentRules);          
+                calculatingAdjustment(result.adjustmentRules, resolve, reject);
             }, function(e) {
                 console.error("Failed:", e);
-                // reject();
+                reject(e);
             });
             
         },
-        calculateTotalOffset = function (){
+        calculateTotalOffset = function (resolve){
             console.log(dayLightSavingOffset);
             console.log(userTimeZoneOffset);
-            // resolve();
+            // return userTimeZoneOffset;
+            let offset = {"hours":0,"minutes":0};
+            offset.hours = parseInt(dayLightSavingOffset.split(":",2)[0], 10) + parseInt(userTimeZoneOffset.offsetFromUtc.split(":",2)[0], 10);
+            offset.minutes = parseInt(dayLightSavingOffset.split(":",2)[1], 10) + parseInt(userTimeZoneOffset.offsetFromUtc.split(":",2)[1], 10);
+            resolve(offset);
         },
         //Calculate the DayLightSaving Adjustment/Offset
-        calculatingAdjustment = function (adjustmentRules){
+        calculatingAdjustment = function (adjustmentRules, resolve, reject){
             var curDate = new Date();
             //Changing Date to UTC to handle calculations   
             curDate.setDate(curDate.getUTCDate());
@@ -180,7 +187,7 @@ window.recallAddIn.timeZoneConversionModule = function(){
                     dayLightSavingOffset = "00:00:00";
                     console.log(dayLightSavingOffset);
                 }
-                calculateTotalOffset();
+                calculateTotalOffset(resolve);
             })();
 
         };
