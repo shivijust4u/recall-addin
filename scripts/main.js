@@ -483,14 +483,14 @@ geotab.addin.testAddIn = function (api, state) {
             _clearRecall(api,this);
          }); 
 
-          document.getElementById("datetimeTesting").addEventListener("click",function(){
-            console.log("Testing DateTime");
-            var test =  recallAddIn.timeZoneConversionModule.userTimeZoneOffset(api);
-            test.then(function(result) {
-              console.log(result.hours);
-            })
-            // var test = await  recallAddIn.userTimeZoneOffsetModule.getUserTimeZoneOffset(api);
-          }); 
+          // document.getElementById("datetimeTesting").addEventListener("click",function(){
+          //   console.log("Testing DateTime");
+          //   var test =  recallAddIn.timeZoneConversionModule.userTimeZoneOffset(api);
+          //   test.then(function(result) {
+          //     console.log(result.hours);
+          //   })
+          //   // var test = await  recallAddIn.userTimeZoneOffsetModule.getUserTimeZoneOffset(api);
+          // }); 
 
           document.getElementById("recallPrintPDF").addEventListener("click",function(){            
              recallAddIn.utilitiesModule.printToPDF(this.getAttribute("data-vehiclekey"), this.getAttribute("data-recallid"));

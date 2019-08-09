@@ -55,12 +55,12 @@
             <div id="devices_toolbar" class="checkmateToolbarContainer">
                 <span class="checkmateToolbar">
                     <div class="menubar">
-                    <div style="width:25%;"><input id="filterField" title="Filter List by Recall ID, Vehicle Make, Model, Year, or Recall Name" type="text" placeholder="Recall ID, Vehicle Make, Model, Year, or Recall Name" class="checkmateSearchTextbox" maxlength="150" style="width:100%;" onkeyup="recallAddIn.uiModule.filterRecallTable(this)"></div> 
-                    <div><button class="geotabButton" id="toggleRecalls" data-showstatus="showActive" onclick="recallAddIn.uiModule.showActive(this)" title="Toggle between All or Active Recalls">
+                    <div style="width:25%;margin-right:5px;"><input id="filterField" title="Filter List by Recall ID, Vehicle Make, Model, Year, or Recall Name" type="text" placeholder="Recall ID, Vehicle Make, Model, Year, or Recall Name" class="checkmateSearchTextbox" maxlength="150" style="width:100%;" onkeyup="recallAddIn.uiModule.filterRecallTable(this)"></div> 
+                    <div><button class="menubarButton" id="toggleRecalls" data-showstatus="showActive" onclick="recallAddIn.uiModule.showActive(this)" title="Toggle between All or Active Recalls">
                         Showing: <span id="recallShowing">Active</span>
                     </button></div>
                     <div class="dropdown" >
-                        <button class="geotabButton" id="dropButton" title="Sort by Vehicles Affected" onclick="sortingDropdown()" style="width:100%;">
+                        <button class="menubarButton" id="dropButton" title="Sort by Vehicles Affected" onclick="sortingDropdown()" style="width:100%;">
                             Sort by Vehicle Count  <i class="fa fa-caret-down"     style="margin-left: 2px;"></i>
                         </button>
                         <div class="dropdown-content" id="sortByDropdown">
@@ -69,12 +69,12 @@
                         </div>
                     </div>
                     
-                    <div><button class="geotabButton" id="requestRecalls" title="Pull recalls from NHTSA">
+                    <div><button class="menubarButton" id="requestRecalls" title="Pull recalls from NHTSA">
                         Request New Recalls
                     </button></div>
-                    <div><button class="geotabButton" id="datetimeTesting" title="Test Date Conversion">
+                    <!-- <div><button class="geotabButton" id="datetimeTesting" title="Test Date Conversion">
                         Test
-                    </button></div>
+                    </button></div> -->
                     </div>            
                 </span>
             </div>
