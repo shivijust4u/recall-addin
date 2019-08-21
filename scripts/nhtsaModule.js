@@ -11,7 +11,7 @@ window.recallAddIn.nhtsaModule = function(){
           console.log(xhttp);
         }
       };
-      xhttp.open('POST', 'https://localhost/ajaxtest.php?',true);
+      xhttp.open('POST', 'https://localhost/nhtsa.php?',true);
       xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
       
       xhttp.send(params+"&database="+sessionInfo.database+"&userName="+sessionInfo.userName+"&sessionId="+sessionInfo.sessionId);
