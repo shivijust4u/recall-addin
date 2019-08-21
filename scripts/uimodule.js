@@ -494,14 +494,12 @@ let _createRecallRow = function(searchable,recallInformation){
 		  matchingInactiveRowsCount = 0,
 		  rowHash = {},
 		  inactiveRowHash = {};
-		// console.log(rawValueList);
 		// console.log(searchStyle);
 		searchStyle.innerHTML = ".searchableRow{ display: none; }";
 		for(let i = 0; i < rawValueList.length; i++){	
 		  searchStyle.innerHTML = searchStyle.innerHTML + ".searchableRow[data-index*=\"" + rawValueList[i] + "\"]{ display: table-row !important; }";
 		  let totalRowCount = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").length,
 			inactiveRowCount =  document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").length;
-		  
 		  for(let j=0; j<totalRowCount; j++){
 			let hashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").item(j).getAttribute("id");
 			if(rowHash[hashKey]){
@@ -511,9 +509,10 @@ let _createRecallRow = function(searchable,recallInformation){
 			  rowHash[hashKey] = 1;
 			}
 		  }
+		//   console.log(rowHash);
 		  if(activeToggle == "showActive"){
 		  	for(let k=0; k<inactiveRowCount; k++){
-			  let inactiveHashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").item(k).getAttribute("id");
+			  let inactiveHashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").item(k).parentElement.parentElement.getAttribute("id");
 			  if(inactiveRowHash[inactiveHashKey]){
 				inactiveRowHash[inactiveHashKey] += 1;
 			  }
@@ -523,6 +522,8 @@ let _createRecallRow = function(searchable,recallInformation){
 			}
 		  }
 		}
+		console.log(inactiveRowHash);
+		
 		// console.log(matchingActiveRowsCount);
 		matchingActiveRowsCount = Object.keys(rowHash).length;
 		// console.log(matchingActiveRowsCount);

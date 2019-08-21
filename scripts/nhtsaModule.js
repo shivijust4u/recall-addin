@@ -4,6 +4,7 @@ window.recallAddIn.nhtsaModule = function(){
     this.get = function (params, aCallback) {
       let sessionInfo;
       api.getSession(function(session){sessionInfo = session;});
+      console.log(window.location.hostname);
       let xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -14,7 +15,7 @@ window.recallAddIn.nhtsaModule = function(){
       xhttp.open('POST', 'https://localhost/nhtsa.php?',true);
       xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
       
-      xhttp.send(params+"&database="+sessionInfo.database+"&userName="+sessionInfo.userName+"&sessionId="+sessionInfo.sessionId);
+      xhttp.send(params+"&database="+sessionInfo.database+"&userName="+sessionInfo.userName+"&sessionId="+sessionInfo.sessionId+"&hostName="+window.location.hostname);
     };
   },
   _callNHTSA = function (args) {
