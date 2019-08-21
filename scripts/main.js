@@ -471,7 +471,7 @@ geotab.addin.testAddIn = function (api, state) {
       // Implement Download Recall Information into CSV/Excel - Done
       // Implement Reminder Rule creation and Vehicle assignment - Done
       // Implement Maintenance Event from Recalls Page - Done
-      // Implement PHP Security  
+      // Implement PHP Security - Done
       // Implement "NEXT" Table logic - Done
       // Implement Progress Bar
       // Implement Audit Log
