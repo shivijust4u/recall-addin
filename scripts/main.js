@@ -8,81 +8,6 @@ geotab.addin.testAddIn = function (api, state) {
   const _initializeAddin = function(){
     const   searchStyle = document.getElementById('recallTextSearchStyle'),
             statusStyle = document.getElementById('recallStatusSearchStyle');
-    
-    // document.getElementById("filterField").addEventListener("keyup", recallAddIn.uiModule.filterRecallTable());
-    // {
-    //   //TODO: Make this a function (Filter Recalls)
-    //   console.log(event);
-    //   // let rawValue = this.value.replace(/\W+/g," ").toLowerCase().trim();
-    //   // if (!rawValue) {
-    //   //     searchStyle.innerHTML = "";
-    //   //     //TODO: Call Toggle Recalls Function
-    //   //     return;
-    //   // }
-    //   // console.log(rawValue);
-    //   // let activeToggle =  document.getElementById('toggleRecalls').getAttribute   ("data-showstatus"), 
-    //   //   rawValueList = rawValue.split(" "), 
-    //   //   matchingActiveRowsCount = 0,
-    //   //   matchingInactiveRowsCount = 0,
-    //   //   rowHash = {},
-    //   //   inactiveRowHash = {};
-    //   // console.log(rawValueList);
-    //   // console.log(searchStyle);
-    //   // searchStyle.innerHTML = ".searchableRow{ display: none; }";
-    //   // for(let i = 0; i < rawValueList.length; i++){	
-    //   //   searchStyle.innerHTML = searchStyle.innerHTML + ".searchableRow[data-index*=\"" + rawValueList[i] + "\"]{ display: table-row !important; }";
-    //   //   let totalRowCount = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").length,
-    //   //     inactiveRowCount =  document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").length;
-        
-    //   //   for(let j=0; j<totalRowCount; j++){
-    //   //     let hashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"]").item(j).getAttribute("id");
-    //   //     if(rowHash[hashKey]){
-    //   //       rowHash[hashKey] += 1;
-    //   //     }
-    //   //     else{
-    //   //       rowHash[hashKey] = 1;
-    //   //     }
-    //   //   }
-    //   //   if(activeToggle == "showActive"){
-    //   //   for(let k=0; k<inactiveRowCount; k++){
-    //   //       let inactiveHashKey = document.querySelectorAll("[data-index*=\"" + rawValueList[i] + "\"] .checkmateListBuilderRowInactive").item(k).getAttribute("id");
-    //   //       if(inactiveRowHash[inactiveHashKey]){
-    //   //         inactiveRowHash[inactiveHashKey] += 1;
-    //   //       }
-    //   //       else{
-    //   //         inactiveRowHash[inactiveHashKey] = 1;
-    //   //       }
-    //   //     }
-    //   //   }
-    //   // }
-    //   // console.log(matchingActiveRowsCount);
-    //   // matchingActiveRowsCount = Object.keys(rowHash).length;
-    //   // console.log(matchingActiveRowsCount);
-    //   // console.log(rowHash);
-    //   // matchingInactiveRowsCount = Object.keys(inactiveRowHash).length;
-    //   // document.getElementById("outstandingRecalls").textContent = matchingActiveRowsCount-matchingInactiveRowsCount;
-
-    // });
-    // document.getElementById('toggleRecalls').addEventListener("click", function(event){
-    //   recallAddIn.uiModule.showActive(this);  
-    //     //TODO: Make this a function (Toggle Recalls)
-    //     let currentStatus = this.getAttribute("data-showstatus"),
-    //         inactiveRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("checkmateListBuilderRowInactive").length,
-    //         totalRecalls = document.getElementById("recallsListBuilder").getElementsByClassName("searchableRow").length;
-    //     if(currentStatus == "showAll"){
-    //         this.setAttribute("data-showstatus", "showActive");
-    //         document.getElementById("recallShowing").textContent = "Active";
-    //         statusStyle.innerHTML = "#recallsListBuilder .checkmateListBuilderRowInactive{ display: none;}";
-    //         document.getElementById("outstandingRecalls").textContent = totalRecalls - inactiveRecalls;
-    //          //TODO: Call Filter Recalls Function
-    //     }else{
-    //         this.setAttribute("data-showstatus", "showAll");
-    //         document.getElementById("recallShowing").textContent = "All";
-    //         statusStyle.innerHTML = "";
-    //         document.getElementById("outstandingRecalls").textContent = totalRecalls;
-    //          //TODO: Call Filter Recalls Function
-    //     }
-    // });
   },
   _loadVehicles = async function (api, groupsArray){
     recallAddIn.uiModule.toggleLoading(true, "Getting vehicles & local recalls...");
@@ -483,13 +408,29 @@ geotab.addin.testAddIn = function (api, state) {
             _clearRecall(api,this);
          }); 
 
-          // document.getElementById("datetimeTesting").addEventListener("click",function(){
-          //   console.log("Testing DateTime");
-          //   var test =  recallAddIn.timeZoneConversionModule.userTimeZoneOffset(api);
-          //   test.then(function(result) {
-          //     console.log(result.hours);
-          //   })
-          //   // var test = await  recallAddIn.userTimeZoneOffsetModule.getUserTimeZoneOffset(api);
+          // document.getElementById("nhtsaTesting").addEventListener("click",function(){
+          //   console.log("Testing NHTSA");
+          //   console.log(sessionInfo);
+          //   console.log(api);
+          //   // 1. create a new XMLHttpRequest object -- an object like any other!
+          //   var xhttp = new XMLHttpRequest();
+          //   xhttp.onreadystatechange = function() {
+          //     if (this.readyState == 4 && this.status == 200) {
+          //       document.getElementById("nhtsaTesting").innerText =
+          //       this.responseText;
+          //       console.log(xhttp);
+          //     }
+          //   };
+
+          //   // 2. open the request and pass the HTTP method name and the resource as parameters
+          //   xhttp.open('POST', 'https://localhost/ajaxtest.php?',true);
+          //   xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            
+          //   xhttp.send("id=11V101000&database="+sessionInfo.database+"&userName="+sessionInfo.userName+"&sessionId="+sessionInfo.sessionId);
+          //   // var test =  recallAddIn.nhtsaModule.getRecallInformationById("12V176000");
+          //   // test.then(function(result) {
+          //   //   console.log(result);
+          //   // })
           // }); 
 
           document.getElementById("recallPrintPDF").addEventListener("click",function(){            

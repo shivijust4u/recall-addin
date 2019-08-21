@@ -352,8 +352,6 @@ let _createRecallRow = function(searchable,recallInformation){
 			vehicleHTML += decodeHTMLEntities(vehicleInformation.vin);
 			vehicleHTML += '</div></div> <div class="g-item secondaryData hidden-xs" title="Status">';
 			vehicleHTML += '<div class="g-ctrl"> <button class="geotabButton positiveButton maintenanceButton1" onclick="recallAddIn.uiModule.openMaintenance(this,0)" data-vehicleId="' + decodeHTMLEntities(vehicleInformation.id) + '" data-vehicleName="' + decodeHTMLEntities(vehicleInformation.name) + '" data-vehicleVin="' + decodeHTMLEntities(vehicleInformation.vin) + '" data-reminderType="' + decodeHTMLEntities(vehicleInformation.vin) + '" id="' + decodeHTMLEntities(vehicleInformation.id) + '" title="Add Maintenance Reminder"> Add Reminder </button></div>';
-			
-			// maintenanceHTML = '<div class="maintenanceInfoContainer"><label class="maintenanceInfoLabel">Last Edit: <span class="maintenanceDate"></span> - <span class="maintenanceUser"></span><div class="horizontalButtonSet"><button class="geotabButton" data-action="new"  data-vehicleId="' + decodeHTMLEntities(vehicleInformation.id) + '" onclick="recallAddIn.uiModule.editMaintenance(this)">RESET</button><button class="geotabButton" data-action="ignored"  data-vehicleId="' + decodeHTMLEntities(vehicleInformation.id) + '" onclick="recallAddIn.uiModule.editMaintenance(this)">IGNORE</button><button class="geotabButton" data-action="open"  data-vehicleId="' + decodeHTMLEntities(vehicleInformation.id) + '" onclick="recallAddIn.uiModule.editMaintenance(this)">OPEN</button><button class="geotabButton" data-action="fixed"  data-vehicleId="' + decodeHTMLEntities(vehicleInformation.id) + '" onclick="recallAddIn.uiModule.editMaintenance(this)">FIX</button></div></div>';
 			vehicleHTML += '';
 			vehicleHTML += '</div></div></a>';
 			vehicleDiv.innerHTML = vehicleHTML;
@@ -368,7 +366,7 @@ let _createRecallRow = function(searchable,recallInformation){
 		let pageShifters = document.querySelectorAll("a[data-pager]");
 		// pageSelected.setAttribute("style", "color:blue; font-weight: bold;")
 		for(let i=0;i<pageShifters.length;i++){
-			pageShifters.item(i).setAttribute("style", "color:blue; font-weight: normal;")
+			pageShifters.item(i).setAttribute("style", "color:blue; font-weight: normal;");
 		}
 		if(pageSelected.innerText.trim() != "<<" && pageSelected.innerText.trim() != ">>" ){
 			let pp =pageSelected.setAttribute("style", "color:darkblue; font-weight: bold;");			

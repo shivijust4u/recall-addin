@@ -1,58 +1,63 @@
 window.recallAddIn = window.recallAddIn || {};
 window.recallAddIn.nhtsaModule = function(){
     let _HttpClient = function () {
-    this.get = function (aUrl, aCallback) {
-      let anHttpRequest = new XMLHttpRequest();
-      anHttpRequest.onreadystatechange = function () {
-        if (anHttpRequest.readyState === 4 && anHttpRequest.status === 200) {
-          aCallback(anHttpRequest.responseText);
+    this.get = function (params, aCallback) {
+      let sessionInfo;
+      api.getSession(function(session){sessionInfo = session;});
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          aCallback(xhttp.responseText);
+          console.log(xhttp);
         }
-      }
-      anHttpRequest.open("GET", aUrl, true);
-      anHttpRequest.send(null);
-    }
+      };
+      xhttp.open('POST', 'https://localhost/ajaxtest.php?',true);
+      xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      
+      xhttp.send(params+"&database="+sessionInfo.database+"&userName="+sessionInfo.userName+"&sessionId="+sessionInfo.sessionId);
+    };
   },
   _callNHTSA = function (args) {
     const callNHTSAPromise = new Promise((resolve, reject) => {
       const client = new _HttpClient();
-      let targetURL = 'https://www.geotab.com/mygeotab/addin/recall/v2/scripts/nhtsa.php?';
+      let postParams = '';
 
       if(typeof(args) === "undefined" || args == "?"){
         	console.log("This method takes in one args parameter. It is an asynchronous method.");
         	console.log("args = {type: byId or byVehicle, recallId: id, make: make, model: model, year: year}");        
           console.log("If succesful this method returns Recall Information from NHTSA in JSON Format");
           reject("Error: Check Console for more details");
+      }else{
+        if(args.type == "byId"){
+          postParams += 'id=' + args.recallId;
+        }else if(args.type == "byVehicle"){
+          postParams += 'make=' + args.make + '&model=' + args.model + '&year=' + args.year;
         }else{
-          if(args.type == "byId"){
-            targetURL += 'id=' + args.recallId;
-          }else if(args.type == "byVehicle"){
-            targetURL += 'make=' + args.make + '&model=' + args.model + '&year=' + args.year;
-          }else{
-            reject(new Error("Undefined Argument Type : " + args.type));
-          }
-
-          client.get(targetURL,
-            function (response) {
-              try {
-                  let jsonResponse = JSON.parse(response);
-				if(typeof(jsonResponse) === "undefined" || typeof(jsonResponse.Message) === "undefined"){
-				   reject(new Error("Unable to retrieve recall from NHTSA."));
-				}else{
-					if(jsonResponse.Message == "Results returned successfully" || jsonResponse.Message ==  "No results found for this request"){
-					  if(args.type == "byId"){
-						resolve(jsonResponse.Results[0]);
-					  }else{
-						resolve(jsonResponse.Results);
-					  }
-					}else{
-					  reject(new Error("Unable to retrieve recall from NHTSA."));
-					}
-				}
-              } catch (err) {
-                reject(new Error(err));
-              }
-            });
+          reject(new Error("Undefined Argument Type : " + args.type));
         }
+
+        client.get(postParams,
+          function (response) {
+            try {
+                let jsonResponse = JSON.parse(response);
+                if(typeof(jsonResponse) === "undefined" || typeof(jsonResponse.Message) === "undefined"){
+                    reject(new Error("Unable to retrieve recall from NHTSA."));
+                }else{
+                  if(jsonResponse.Message == "Results returned successfully" || jsonResponse.Message ==  "No results found for this request"){
+                    if(args.type == "byId"){
+                    resolve(jsonResponse.Results[0]);
+                    }else{
+                    resolve(jsonResponse.Results);
+                    }
+                  }else{
+                    reject(new Error("Unable to retrieve recall from NHTSA."));
+                  }
+                }
+            } catch (err) {
+            reject(new Error(err));
+          }
+        });
+      }
     });
     return callNHTSAPromise;
   },
