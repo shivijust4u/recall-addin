@@ -1,8 +1,6 @@
 <?php
-	// header('Access-Control-Allow-Origin: *');
+	header('Access-Control-Allow-Origin: *');
 	header('Content-type: application/json;charset=utf-8');
-	//Add domain security to Access-Control-Allow-Origin: function that will create an array of my0-my500.geotab.com
-	//Referer check can be added as well: https://my112.geotab.com/
 
 	$make       = $_REQUEST['make'];
 	$model      = $_REQUEST['model'];
@@ -11,10 +9,12 @@
     $database   = $_REQUEST['database'];
     $userName   = $_REQUEST['userName'];
     $sessionId  = $_REQUEST['sessionId'];
-	$referer = $_SERVER["HTTP_REFERER"];
+    $hostName   = $_REQUEST['hostName'];
+    $referer = $_SERVER["HTTP_REFERER"];
 	$file = "nhtsa.txt";
     // echo $database .$userName .$sessionId;
-    $url = 'https://my237.geotab.com/apiv1';
+    $url = 'https://'+$hostName+'/apiv1';
+    // $url = 'https://my237.geotab.com/apiv1';
     $ch = curl_init($url);
     //setup request to send json via POST
     $data = array(
