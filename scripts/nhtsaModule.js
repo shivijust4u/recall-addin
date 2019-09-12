@@ -12,7 +12,8 @@ window.recallAddIn.nhtsaModule = function(){
           console.log(xhttp);
         }
       };
-      xhttp.open('POST', 'https://localhost/nhtsa.php?',true);
+      // xhttp.open('POST', 'https://localhost/nhtsa.php?',true);
+      xhttp.open('POST', 'https://www.geotab.com/mygeotab/addin/recall/v2/scripts/nhtsaV2.php?',true);
       xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
       
       xhttp.send(params+"&database="+sessionInfo.database+"&userName="+sessionInfo.userName+"&sessionId="+sessionInfo.sessionId+"&hostName="+window.location.hostname);
