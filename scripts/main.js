@@ -326,19 +326,21 @@ geotab.addin.testAddIn = function (api, state) {
     let odometerList = await recallAddIn.myGeotabModule.getVehicleOdometer(api,vehicleArray);
     console.log(odometerList[0]);
 
-    if(odometerList.length == 1){
-      odometerList = [odometerList];
-    }
-    if(enginehoursList.length == 1){
-      enginehoursList = [enginehoursList];
-    }
+    // if(odometerList.length == 1){
+    //   odometerList = [odometerList];
+    // }
+    // if(enginehoursList.length == 1){
+    //   enginehoursList = [enginehoursList];
+    // }
 
     let entityList = [];
     for(let i = 0; i < vehicleArray.length; i++){
       const vehicle = recallAddIn.myGeotabCache.devices[vehicleArray[i]];
       // vehicleInformation.push({id:vehicleArray[i],name:vehicle.name});
       for(let j = 0; j < odometerList.length; j++){
-        // console.log(odometerList[j][0].device.id);
+        // console.log(odometerList[0]);
+        // console.log(odometerList[0][0]);
+        // console.log(odometerList[0][0][0]);
         if (vehicleArray[i] == odometerList[j][0].device.id){
           for(let k = 0; k < enginehoursList.length; k++){
             if (vehicleArray[i] == enginehoursList[k][0].device.id){
