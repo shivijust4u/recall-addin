@@ -18,7 +18,7 @@ window.recallAddIn.databaseModule = function(){
         return createTablePromise;
     },
     createRecallTable = async function(api){
-        const   tableEntity = {"addInId":recallAddInId, "groups":[{"id": "GroupCompanyId"}]};
+        const   tableEntity = {"addInId":recallAddInId, "groups":[]};
         let data = JSON.stringify({"next":null,"recalls":[],"version":1});
         
         tableEntity.data = data;
@@ -26,7 +26,7 @@ window.recallAddIn.databaseModule = function(){
         return await _createTable(api, tableEntity);
     },
     createMasterTable = async function(api){
-        const   tableEntity = {"addInId":recallAddInId, "id":recallMasterTableId, "groups":[{"id": "GroupCompanyId"}]};
+        const   tableEntity = {"addInId":recallAddInId, "id":recallMasterTableId, "groups":[]};
         let data = JSON.stringify({"next":null,"masterList":[{}],"version":1, "ruleTypeId": null});
         
         tableEntity.data = data;
